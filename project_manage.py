@@ -1,9 +1,11 @@
 # import database module
 
-# define a funcion called initializing
+# define a funcionhkg called initializing
+
 
 def initializing():
     pass
+
 
 # here are things to do in this function:
 
