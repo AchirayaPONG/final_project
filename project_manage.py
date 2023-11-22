@@ -1,11 +1,33 @@
 # import database module
+import csv, os
+from database import Table
+from database import Database
+# define a function called initializing
 
-# define a funcionhkg called initializing
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+
+def read_csv_data(filename):
+    lst_db = []
+    with open(os.path.join(__location__, filename)) as f:
+        rows = csv.DictReader(f)
+        for r in rows:
+            lst_db.append(dict(r))
+
+    return lst_db
 
 
 def initializing():
-    pass
+    read_person = read_csv_data('persons.csv')
+    read_login = read_csv_data('login.csv')
 
+    person = Table('person', read_person)
+    login_data = Table('login', read_login)
+
+    db = Database()
+    db.insert(person)
+    db.insert(login_data)
 
 # here are things to do in this function:
 
@@ -20,7 +42,10 @@ def initializing():
 
 # define a funcion called login
 
+
+
 def login():
+
     pass
 
 # here are things to do in this function:
@@ -35,7 +60,7 @@ def exit():
 # here are things to do in this function:
    # write out all the tables that have been modified to the corresponding csv files
    # By now, you know how to read in a csv file and transform it into a list of dictionaries. For this project, you also need to know how to do the reverse, i.e., writing out to a csv file given a list of dictionaries. See the link below for a tutorial on how to do this:
-   
+
    # https://www.pythonforbeginners.com/basics/list-of-dictionaries-to-csv-in-python
 
 
