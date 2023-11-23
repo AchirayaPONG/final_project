@@ -51,6 +51,9 @@ class Table:
     def __str__(self):
         return self.table_name + ':' + str(self.table)
 
+    def get_table(self):
+        return self.table
+
 # add in code for a Database class
 
 # add in code for a Table class
