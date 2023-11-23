@@ -71,12 +71,13 @@ def login():
 def exit():
     global db
     lst = []
-    with open(os.path.join(__location__, 'person', 'w')) as f:
+    with open(os.path.join(__location__, 'persons.csv'), 'w') as f:
         rows = csv.writer(f)
         rows.writerow(['1', '2'])
         class_table: Table = db.search('person')
         for r in class_table.get_table():
-            value_r = r.value()
+            r: dict
+            value_r = r.values()
             # {a: b, c: d}
             # [a, b, c, d, ...]
             rows.writerow(value_r)
@@ -109,5 +110,5 @@ print(val)
 # elif val[1] = 'advisor':
     # see and do advisor related activities
 
-# once everyhthing is done, make a call to the exit function
+# once everything is done, make a call to the exit function
 exit()
