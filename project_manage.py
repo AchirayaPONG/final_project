@@ -70,11 +70,10 @@ def login():
 # define a function called exit
 def exit():
     global db
-    lst = []
     with open(os.path.join(__location__, 'persons.csv'), 'w') as f:
         rows = csv.writer(f)
-        rows.writerow(['1', '2'])
         class_table: Table = db.search('person')
+        rows.writerow(class_table.get_table()[0].keys())
         for r in class_table.get_table():
             r: dict
             value_r = r.values()
@@ -112,3 +111,36 @@ print(val)
 
 # once everything is done, make a call to the exit function
 exit()
+
+
+class Admin:
+    def __init__(self, update, delete, add):
+        self.update = update
+        self.delete = delete
+        self.add = add
+
+    def update(self, primary_attribute, primary_attribute_value):
+        lst_update = []
+        with open(os.path.join(__location__, 'login.csv')) as f:
+            rows = csv.writer(f)
+            for r in primary_attribute and primary_attribute_value in rows:
+                r: dict
+                update_value = r.values()
+                rows.writerow(update_value)
+                update_attribute = r.keys()
+                rows.writerow(update_attribute)
+                lst_update.append(update_attribute)
+                lst_update.append(update_value)
+        return lst_update
+
+
+
+
+
+
+
+
+
+
+
+
