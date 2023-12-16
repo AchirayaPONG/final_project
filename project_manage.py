@@ -10,6 +10,45 @@ __location__ = os.path.realpath(
 db = Database()
 
 
+# Member: Check member's project details in file project_table.csv
+
+def check_project_id(user_id):
+    """Check id in login.csv file and project_table.csv file
+
+    if it is same then print project details.
+    """
+    with open(os.path.join(__location__, 'project_table.csv')) as f:
+        rows = csv.DictReader(f)
+        list_project = []
+        for r in rows:
+            if r['Lead'] == user_id or r['Member1'] == user_id\
+                    or r['Member2'] == user_id:
+                list_project.append(dict(r))
+        return list_project
+
+
+class Admin:
+    def __init__(self, update, delete, add):
+        self.update = update
+        self.delete = delete
+        self.add = add
+
+    def update(self, primary_attribute, primary_attribute_value):
+        lst_update = []
+        with open(os.path.join(__location__, 'login.csv')) as f:
+            rows = csv.writer(f)
+            for r in primary_attribute and primary_attribute_value in rows:
+                r: dict
+                update_value = r.values()
+                rows.writerow(update_value)
+                update_attribute = r.keys()
+                rows.writerow(update_attribute)
+                lst_update.append(update_attribute)
+                lst_update.append(update_value)
+        return lst_update
+
+
+
 def read_csv_data(filename):
     lst_db = []
     with open(os.path.join(__location__, filename)) as f:
@@ -96,11 +135,22 @@ print(val)
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 
-# if val[1] = 'admin':
+if val[1] == 'admin':
+    pass
     # see and do admin related activities
-# elif val[1] = 'student':
+elif val[1] == 'student':
+    pass
     # see and do student related activities
-# elif val[1] = 'member':
+elif val[1] == 'member':
+    data = check_project_id(user_id=val[0])
+    for dict_of_project in data:
+        print(f'Project project id: {dict_of_project["ProjectID"]}')
+        print(f'Project title: {dict_of_project["Title"]}')
+        print(f'Project lead: {dict_of_project["Lead"]}')
+        print(f'Project member1: {dict_of_project["Member1"]}')
+        print(f'Project member2: {dict_of_project["Member2"]}')
+        print(f'Project advisor: {dict_of_project["Advisor"]}')
+        print(f'Project status: {dict_of_project["Status"]}')
     # see and do member related activities
 # elif val[1] = 'lead':
     # see and do lead related activities
@@ -111,36 +161,3 @@ print(val)
 
 # once everything is done, make a call to the exit function
 exit()
-
-
-class Admin:
-    def __init__(self, update, delete, add):
-        self.update = update
-        self.delete = delete
-        self.add = add
-
-    def update(self, primary_attribute, primary_attribute_value):
-        lst_update = []
-        with open(os.path.join(__location__, 'login.csv')) as f:
-            rows = csv.writer(f)
-            for r in primary_attribute and primary_attribute_value in rows:
-                r: dict
-                update_value = r.values()
-                rows.writerow(update_value)
-                update_attribute = r.keys()
-                rows.writerow(update_attribute)
-                lst_update.append(update_attribute)
-                lst_update.append(update_value)
-        return lst_update
-
-
-
-
-
-
-
-
-
-
-
-
