@@ -2,6 +2,9 @@
 import csv, os
 from database import Table
 from database import Database
+import random
+import time
+import datetime
 # define a function called initializing
 
 __location__ = os.path.realpath(
@@ -114,20 +117,28 @@ class Student:
         val_project = db.search('project_table').table
         # val_project shows all the project details in project_table.csv file
         # And it is in list of dictionary format [{}, {}, {}]
+        print("." * 50)
+        print("If you accept the invitation, "
+              "you'll be part of the project from start to finish.")
+        print("." * 50)
         for project in val_project:  # show dictionary of project details
             # {ProjectID: P001,..., Status: Completed}
             if self.id in project.values():
                 print(f"You are already part of a project: {project['Title']}")
+                print("_" * 50)
 
 
     def accept_or_deny(self):
-        val_project = db.search('member_request_table').table
+        val_project = db.search('member_table').table
         for project in val_project:
             if self.id in project.values():  # check if student is in project
                 if project['Response'] == 'Pending':
+                    print("*" * 50)
                     print("The lead has invited you to join a project.")
+                    print("*" * 50)
                     response = input("Would you like to accept the "
                                      "invitation? (y/n): ").lower()
+                    print("_" * 50)
                     if response == 'y':
                         self.invitation_status = 'accepted'
                         # update invitation status
@@ -142,6 +153,8 @@ class Student:
     def see_project_details(self):
         if self.invitation_status == 'accepted':
             for key, value in self.project_details.items():
+                print("_" * 50)
+                print("___Project Details___\n")
                 print(f"{key}: {value}")
         # if it's accepted, print the project details
         else:
@@ -166,8 +179,9 @@ class Student:
                     print("7. Status\n")
                     print("8. Exit\n")
                     print("_" * 50)
+                    print("Would you like to modify the project?")
                     response = \
-                        input("Would you like to modify the project?: ")
+                        input("Choose a number from the options above:")
                     if response == '1':
                         project_id = input("Enter new project ID: ")
                         project['ProjectID'] = project_id
@@ -200,22 +214,250 @@ class Student:
                         exit('project_table')
 
 
+class LeadStudent:
+    def __init__(self, lead_id, project_table, person_table, member_request_table):
+        self.id = lead_id
+        self.project_details = {}
+        self.group_members = []
+        self.project_table = project_table
+        self.person_table = person_table
+        self.member_request_table: Table = member_request_table
 
-# Example Usage:
-# student1 = Student(9898118, 'Lionel', 'Messi')
-# lead_name = 'Robert Lewandowski'
-# project_details = {
-#     'ProjectID': 'P002',
-#     'Title': 'Marketing Campaign',
-#     'Lead': lead_name,
-#     'Member1': 'Gareth Bale',
-#     'Member2': 'Sergio Ramos',
-#     'Advisor': 'Dr. Jennifer Lee',
-#     'Status': 'Completed'
-# }
-#
-# student1.receive_invitation(lead_name)
-# student1.invitation_status()
+    def show_information(self):
+        while True:
+            print("1. Create Project")
+            print("2. Find Members")
+            print("3. Send Invitations to Members")
+            print("4. Add member to project")
+            print("5. See & Modify Project Details")
+            print("6. Send Advisor Request")
+            print("7. Submit Final Report")
+            print("8. Exit")
+            print("_" * 50)
+            choice = input("Enter your choice: ")
+            print("_" * 50)
+            if choice == '1':
+                title = input("Enter project title: ")
+                advisor = input("Enter advisor: ")
+                self.create_project(title, advisor)
+            elif choice == '2':
+                self.find_members()
+            elif choice == '3':
+                self.send_invitations()
+            elif choice == '4':
+                self.add_member()
+            elif choice == '5':
+                self.see_project_details()
+            elif choice == '6':
+                advisor = input("Enter advisor: ")
+                self.send_advisor_request(advisor)
+            elif choice == '7':
+                self.submit_final_report()
+            elif choice == '8':
+                exit('project_table')
+
+
+    def create_project(self, title, advisor):
+        while True:
+            random_number = random.randint(1, 999)
+            formatted_number = f"{random_number:03d}"
+            random_primary_key = f"P{formatted_number}"
+            if random_primary_key not in db.search('project_table').table:
+                break
+
+        self.project_details = {
+            'ProjectID': random_primary_key,
+            'Title': title,
+            'Lead': self.id,
+            'Advisor': advisor,
+            'Status': 'In Progress'
+        }
+
+    def find_members(self):
+        n = 1
+        for project in self.project_table.table:
+            if project['Lead'] == self.id:
+                print(f"{n}. {project['Title']}, Members: {project['Member1']}, {project['Member2']}")
+                n += 1
+        print("_" * 50)
+
+    def send_invitations(self):
+        for person in self.person_table.table:
+            for project in self.project_table.table:
+                if project['Lead'] == self.id:
+                    if person['ID'] not in project.values():
+                        self.member_request_table.insert(entry={
+                            'ProjectID': project['ProjectID'],
+                            'ToBeMember': person['ID'],
+                            'Response': 'Pending',
+                            'ResponseDate': datetime.date.today()
+                        })
+                        print(f"Invitation sent to {person['first']} "
+                              f"{person['last']} "
+                              f"for project {project['Title']}")
+        print("_" * 50)
+
+    def add_member(self):
+        for project in self.project_table:
+            if self.id == project['Lead']:
+                if project['Member1'] == '':
+                    project['Member1'] = input("Enter member1 ID: ")
+                elif project['Member2'] == '':
+                    project['Member2'] = input("Enter member2 ID: ")
+                else:
+                    print("This project is already full.")
+
+    def see_project_details(self):
+        print("\nProject Details:")
+        for key, value in self.project_details.items():
+            print(f"{key}: {value}\n")
+
+    def modify_project_details(self):
+        print("_" * 50)
+        ask_user = \
+            input("Would you like to modify project details? (y/n): ").lower()
+        if ask_user == 'y':
+            print("_" * 50)
+            print("1. Project ID\n")
+            print("2. Title\n")
+            print("3. Lead\n")
+            print("4. Member1\n")
+            print("5. Member2\n")
+            print("6. Advisor\n")
+            print("7. Status\n")
+            print("8. Exit\n")
+            print("_" * 50)
+            print("Would you like to modify the project?\n")
+            response = \
+                input("Choose a number from the options above:")
+            if response == '1':
+                project_id = input("Enter new project ID: ")
+                self.project_details['ProjectID'] = project_id
+                print("Project ID updated successfully.")
+            elif response == '2':
+                project_title = input("Enter new project title: ")
+                self.project_details['Title'] = project_title
+                print("Project title updated successfully.")
+            elif response == '3':
+                project_lead = input("Enter new project lead: ")
+                self.project_details['Lead'] = project_lead
+                print("Project lead updated successfully.")
+            elif response == '4':
+                project_member1 = input("Enter new project member1: ")
+                self.project_details['Member1'] = project_member1
+                print("Project member1 updated successfully.")
+            elif response == '5':
+                project_member2 = input("Enter new project member2: ")
+                self.project_details['Member2'] = project_member2
+                print("Project member2 updated successfully.")
+            elif response == '6':
+                project_advisor = input("Enter new project advisor: ")
+                self.project_details['Advisor'] = project_advisor
+                print("Project advisor updated successfully.")
+            elif response == '7':
+                project_status = input("Enter new project status: ")
+                self.project_details['Status'] = project_status
+                print("Project status updated successfully.")
+            elif response == '8':
+                exit('project_table')
+        else:
+            print("Project details not modified.")
+
+    def send_advisor_request(self, advisor):
+        print(f"Sending request to advisor {advisor}"
+              f" for project "
+              f"'{self.project_table.filter(lambda x: x['Lead'] == self.id).table[0]['Title']}'")
+        # Logic to send a request to the advisor goes here
+        print("_" * 50)
+        print(f"Request sent to advisor {advisor}!")
+        print("_" * 50)
+
+    def submit_final_report(self):
+        project = self.project_table.filter(lambda x: x['Lead'] == self.id).table[0]['Status'] == 'Completed'
+        if project:
+            submit = \
+                input("Would you like to submit the final report? (y/n): ")
+            if submit == 'y':
+                self.project_details['Status'] = 'Completed'
+                print("_" * 50)
+                print(f"Submitting final project report for project"
+                      f"{project}\n Please wait while we are"
+                      f" loading...")
+                # Logic to submit the final report goes here
+                print(time.sleep(5))
+                print("_" * 50)
+                print("Final report submitted successfully, Thank you!")
+                print("_" * 50)
+        else:
+            print('Project status is not completed yet!')
+
+
+
+class NormalFaculty:
+    def __init__(self, faculty_id):
+        self.id = faculty_id
+
+    def see_supervisor_requests(self, project_requests):
+        # if
+        # print(f"\nSupervisor Requests for {self.first_name} {self.last_name}:")
+        for request in project_requests:
+            print(f"ProjectID: {request['ProjectID']},"
+                  f" Title: {request['Title']},"
+                  f" Student: {request['StudentName']}")
+
+    def respond_to_request(self, project_id, response):
+        print(f"Responding to the "
+              f"request for project {project_id}: {response}")
+
+    def view_all_projects(self, all_projects):
+        print("\nDetails of All Projects:")
+        for project in all_projects:
+            print(f"ProjectID: {project['ProjectID']},"
+                  f" Title: {project['Title']},"
+                  f" Advisor: {project['Advisor']}")
+
+    def evaluate_projects(self, projects_to_evaluate):
+        print("\nEvaluating Projects:")
+        for project in projects_to_evaluate:
+            # Placeholder logic for project evaluation,
+            # you can expand on this based on your specific evaluation criteria
+            evaluation_score = input(f"Enter evaluation score "
+                                     f"for project {project['ProjectID']}: ")
+            print(f"Project {project['ProjectID']} "
+                  f"evaluated with a score of {evaluation_score}")
+
+
+class AdvisingFaculty:
+    def __init__(self, faculty_id):
+        self.id = faculty_id
+
+    def see_supervisor_requests(self, project_requests):
+        print(f"\nSupervisor Requests for :")
+        for request in project_requests:
+            print(f"ProjectID: {request['ProjectID']},"
+                  f" Title: {request['Title']},"
+                  f" Student: {request['StudentName']}")
+
+    def send_accept_response(self, project_id):
+        print(f"Sending acceptance response for project {project_id}")
+
+    def send_deny_response(self, project_id):
+        print(f"Sending denial response for project {project_id}")
+
+    def view_all_projects(self, all_projects):
+        print("\nDetails of All Projects:")
+        for project in all_projects:
+            print(f"ProjectID: {project['ProjectID']}, Title: {project['Title']}, Advisor: {project['Advisor']}")
+
+    def evaluate_projects(self, projects_to_evaluate):
+        print("\nEvaluating Projects:")
+        for project in projects_to_evaluate:
+            evaluation_score = random.randint(1, 10)  # Placeholder for random evaluation score (customize as needed)
+            print(f"Project {project['ProjectID']} evaluated with a score of {evaluation_score}")
+
+    def approve_project(self, project_id):
+        print(f"Approving project {project_id}")
+
 
 
 def read_csv_data(filename):
@@ -234,17 +476,17 @@ def initializing():
     read_person = read_csv_data('persons.csv')
     read_login = read_csv_data('login.csv')
     read_project_table = read_csv_data('project_table.csv')
-    read_member_request = read_csv_data('member_request_table.csv')
+    read_member_table = read_csv_data('member_table.csv')
     # print(read_person)
     person = Table('persons', read_person)
     login_data = Table('login', read_login)
     project_table = Table('project_table', read_project_table)
-    member_request_table = Table('member_request_table', read_member_request)
+    member_table = Table('member_table', read_member_table)
 
     db.insert(person)
     db.insert(login_data)
     db.insert(project_table)
-    db.insert(member_request_table)
+    db.insert(member_table)
 
 
 # here are things to do in this function:
@@ -325,7 +567,12 @@ elif val[1] == 'member':
     print(modify_project)
     exit('project_table')
     # see and do member related activities
-# elif val[1] = 'lead':
+elif val[1] == 'lead':
+    lead = LeadStudent(val[0],
+                       db.search('project_table'),
+                       db.search('persons'),
+                       db.search('member_table'))
+    lead.show_information()
     # see and do lead related activities
 # elif val[1] = 'faculty':
     # see and do faculty related activities
