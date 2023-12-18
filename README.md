@@ -11,8 +11,6 @@
   - proposal.md
   - advisor_table.csv
 
-** file.py have class what? **
-and explain what each class does
 
 #### database.py ####
 class Database
