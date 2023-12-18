@@ -44,29 +44,30 @@ class Member
 complete: 100%
 
 class LeadStudent
--show_information : show project detail
--create_project : create project
--find_member : find member to join project
--add_member : add member to project
--see_project_details : see project detail
--modify_project_details : modify project detail
--send_advisor_request : send advisor request
--submit_final_report : submit final report
+- show_information : show project detail
+- create_project : create project
+- find_member : find member to join project
+- send_invitations : send invitation to member
+- add_member : add member to project
+- see_project_details : see project detail
+- modify_project_details : modify project detail
+- send_advisor_request : send advisor request
+- submit_final_report : submit final report
 complete: 100%
 
 class NormalFaculty
--see_request : see request from student
--send_response : send response to student
--see_project_details : see project detail
--evaluate_project : evaluate project
+- see_request : see request from student
+- send_response : send response to student
+- see_project_details : see project detail
+- evaluate_project : evaluate project
 complete: 70%
 
 class AdvisingFaculty
--see_request : see request from student
--send_response : send response to student
--see_project_details : see project detail
--evaluate_project : evaluate project
--approve_project : approve project
+- see_request : see request from student
+- send_response : send response to student
+- see_project_details : see project detail
+- evaluate_project : evaluate project
+- approve_project : approve project
 complete: 60%
 
 ----------------------------------------------
@@ -158,9 +159,10 @@ python project_manage.py
 | Member           | Check project details.               | check_project          | Member          | 100%                  |
 | Member           | Modify project details.              | modify_project         | Member          | 100%                  |
 | Lead             | Create projects.                     | create_project         | Lead            | 100%                  |
-| Lead             | Find and add members to projects.    | find_member            | Lead            | 100%                  |
+| Lead             | Find members in the project.         | find_member            | Lead            | 100%                  |
 | Lead             | Show project details.                | show_information       | Lead            | 100%                  |
 | Lead             | Add member to project.               | add_member             | Lead            | 100%                  |
+| Lead             | Send invitation to member.           | send_invitation        | Lead            | 100%                  |
 | Lead             | See project details.                 | see_project_details    | Lead            | 100%                  |
 | Lead             | Modify project details.              | modify_project         | Lead            | 100%                  |
 | Lead             | Send advisor requests.               | send_advisor_request   | Lead            | 100%                  |
@@ -175,3 +177,5 @@ python project_manage.py
 | Advising Faculty | Evaluate projects.                   | evaluate_project       | AdvisingFaculty | 60%                   |
 | Advising Faculty | Approve projects.                    | approve_project        | AdvisingFaculty | 60%                   |
 ---
+
+send_invitations : send invitation to member
