@@ -56,7 +56,8 @@ class Member:
         ask_user = input("Do you want to modify project details? (y/n): ")
         if ask_user == 'y':
             project_id = input("Enter project id: ")
-            with open(os.path.join(__location__, 'project_table.csv')) as f:
+            with open(os.path.join(__location__, 'project_table.csv'), 'w'
+                      , encoding='uft-8') as f:
                 rows = csv.DictReader(f)
                 for r in rows:
                     if r['ProjectID'] == project_id:
@@ -92,22 +93,17 @@ class Member:
                             print('_' * 50)
                             print("Project details updated successfully.")
                             print('_' * 50)
-                            return True
-                        else:
-                            return False
 
 
 class Admin:
     """Admin class for admin related activities"""
-    def __init__(self, update, delete, add):
-        self.update = update
-        self.delete = delete
-        self.add = add
 
-    def update(self, primary_attribute, primary_attribute_value):
+    @staticmethod
+    def update(primary_attribute, primary_attribute_value):
         """update the value of the primary attribute"""
         lst_update = []
-        with open(os.path.join(__location__, 'login.csv')) as f:
+        with open(os.path.join(__location__, 'login.csv'), 'w',
+                  encoding='uft-8') as f:
             rows = csv.writer(f)
             for r in primary_attribute and primary_attribute_value in rows:
                 r: dict
@@ -118,6 +114,9 @@ class Admin:
                 lst_update.append(update_attribute)
                 lst_update.append(update_value)
         return lst_update
+
+    def __str__(self):
+        return "Admin"
 
 
 class Student:
@@ -263,8 +262,8 @@ class LeadStudent:
             print("_" * 50)
             if choice == '1':
                 title = input("Enter project title: ")
-                advisor = input("Enter advisor: ")
-                self.create_project(title, advisor)
+                advisor_ = input("Enter advisor: ")
+                self.create_project(title, advisor_)
             elif choice == '2':
                 self.find_members()
             elif choice == '3':
@@ -274,15 +273,15 @@ class LeadStudent:
             elif choice == '5':
                 self.see_project_details()
             elif choice == '6':
-                advisor = input("Enter advisor: ")
-                self.send_advisor_request(advisor)
+                advisor_ = input("Enter advisor: ")
+                self.send_advisor_request(advisor_)
             elif choice == '7':
                 self.submit_final_report()
             elif choice == '8':
                 break
 
 
-    def create_project(self, title, advisor):
+    def create_project(self, title, advisor_):
         """Create project"""
         while True:
             random_number = random.randint(1, 999)
@@ -295,7 +294,7 @@ class LeadStudent:
             'ProjectID': random_primary_key,
             'Title': title,
             'Lead': self.id,
-            'Advisor': advisor,
+            'Advisor': advisor_,
             'Status': 'In Progress'
         }
 
@@ -397,14 +396,14 @@ class LeadStudent:
         else:
             print("Project details not modified.")
 
-    def send_advisor_request(self, advisor):
+    def send_advisor_request(self, advisor_):
         """Send advisor request"""
-        print(f"Sending request to advisor {advisor}"
+        print(f"Sending request to advisor {advisor_}"
               f" for project "
               f"'{self.project_table.filter(lambda x: x['Lead'] == self.id).table[0]['Title']}'")
         # Logic to send a request to the advisor goes here
         print("_" * 50)
-        print(f"Request sent to advisor {advisor}!")
+        print(f"Request sent to advisor {advisor_}!")
         print("_" * 50)
 
     def submit_final_report(self):
@@ -480,6 +479,7 @@ class NormalFaculty:
                   f" Title: {project['Title']},"
                   f" Advisor: {project['Advisor']}")
         print("_" * 50)
+
 
     def evaluate_projects(self, projects_to_evaluate):
         """Evaluate projects"""
@@ -623,17 +623,13 @@ def login():
     user_name = input("ENTER USERNAME: ")
     pass_word = input("ENTER PASSWORD: ")
 
-    check_username = lambda x: x['username'] == user_name
-    check_password = lambda X: X['password'] == pass_word
+    # check_username = lambda user: user['username'] == user_name
+    # check_password = lambda password: password['password'] == pass_word
 
     search_login = db.search('login')
     # print(search_login)
-    #
-    for check_data in search_login.get_table():
-        # print(check_data)
-        if check_username(check_data) and check_password(check_data):
-            return [check_data['ID'], check_data['role']]
-    return None
+    user = search_login.filter(lambda x: x['username'] == user_name and x['password'] == pass_word)
+    return user.table[0]['ID'], user.table[0]['role']
 
 
 
@@ -680,8 +676,7 @@ elif val[1] == 'member':
     member = Member()
     check_project = member.check_project_id(val[0])
     print(check_project)
-    MODIFY_PROJECT = member.modify_project_id()
-    print(MODIFY_PROJECT)
+    member.modify_project_id()
     exit_table()
     # see and do member related activities
 elif val[1] == 'lead':
@@ -699,7 +694,15 @@ elif val[1] == 'faculty':
     faculty.view_all_projects(db.search('project_table'))
     faculty.evaluate_projects(db.search('project_table'))
     # see and do faculty related activities
-# elif val[1] = 'advisor':
+elif val[1] == 'advisor':
+    advisor = AdvisingFaculty(val[0])
+    advisor.see_supervisor_requests(db.search('member_request_table'))
+    advisor.send_accept_response('project_id')
+    advisor.send_deny_response('project_id')
+    advisor.view_all_projects(db.search('project_table'))
+    advisor.evaluate_projects(db.search('project_table'))
+    advisor.approve_project('project_id')
+
     # see and do advisor related activities
 
 # once everything is done, make a call to the exit function
