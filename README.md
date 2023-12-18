@@ -147,31 +147,31 @@ python project_manage.py
 
 ### Classes ###
 
-| Roles            | Action                                           | Method               | Class           | Completion percentage |
-|------------------|--------------------------------------------------|----------------------|-----------------|-----------------------|
-| Admin            | Update, delete, and add functionality for users. | update               | Admin           | 90%                   |
-| Admin            | Display role admin in string format.             | __str__              | Admin           | 90%                   |
-| Student          | Accept or deny project invitations.              | accept_or_deny       | Student         | 100%                  |
-| Student          | See invitation from project.                     | see_invitation       | Student         | 100%                  |
-| Student          | See project details.                             | see_project_details  | Student         | 100%                  |
-| Student          | Modify project details.                          | modify_project       | Student         | 100%                  |
-| Member           | Check project details.                           | check_project        | Member          | 100%                  |
-| Member           | Modify project details.                          | modify_project       | Member          | 100%                  |
-| Lead             | Create projects.                                 | create_project       | Lead            | 100%                  |
-| Lead             | Find and add members to projects.                | find_member          | Lead            | 100%                  |
-| Lead             | Show project details.                            | show_project_details | Lead            | 100%                  |
-| Lead             | Add member to project.                           | add_member           | Lead            | 100%                  |
-| Lead             | See project details.                             | see_project_details  | Lead            | 100%                  |
-| Lead             | Modify project details.                          | modify_project       | Lead            | 100%                  |
-| Lead             | Send advisor requests.                           | send_advisor_request | Lead            | 100%                  |
-| Lead             | Submit the final report.                         | submit_final_report  | Lead            | 100%                  |
-| Faculty          | See requests to be supervisors.                  | see_request          | NormalFaculty   | 70%                   |
-| Faculty          | Send responses to serve as advisors.             | send_response        | NormalFaculty   | 70%                   |
-| Faculty          | See details of all projects.                     | see_project_details  | NormalFaculty   | 70%                   |
-| Faculty          | Evaluate projects.                               | evaluate_project     | NormalFaculty   | 70%                   |
-| Advising Faculty | See requests to be supervisors.                  | see_request          | AdvisingFaculty | 60%                   |
-| Advising Faculty | Send accept or deny responses.                   | send_response        | AdvisingFaculty | 60%                   |
-| Advising Faculty | See details of all projects.                     | see_project_details  | AdvisingFaculty | 60%                   |
-| Advising Faculty | Evaluate projects.                               | evaluate_project     | AdvisingFaculty | 60%                   |
-| Advising Faculty | Approve projects.                                | approve_project      | AdvisingFaculty | 60%                   |
+| Roles            | Action                               | Method               | Class           | Completion percentage |
+|------------------|--------------------------------------|----------------------|-----------------|-----------------------|
+| Admin            | Update                               | update               | Admin           | 90%                   |
+| Admin            | Display role admin in string format. | __str__              | Admin           | 90%                   |
+| Student          | Accept or deny project invitations.  | accept_or_deny       | Student         | 100%                  |
+| Student          | See invitation from project.         | see_invitation       | Student         | 100%                  |
+| Student          | See project details.                 | see_project_details  | Student         | 100%                  |
+| Student          | Modify project details.              | modify_project       | Student         | 100%                  |
+| Member           | Check project details.               | check_project        | Member          | 100%                  |
+| Member           | Modify project details.              | modify_project       | Member          | 100%                  |
+| Lead             | Create projects.                     | create_project       | Lead            | 100%                  |
+| Lead             | Find and add members to projects.    | find_member          | Lead            | 100%                  |
+| Lead             | Show project details.                | show_project_details | Lead            | 100%                  |
+| Lead             | Add member to project.               | add_member           | Lead            | 100%                  |
+| Lead             | See project details.                 | see_project_details  | Lead            | 100%                  |
+| Lead             | Modify project details.              | modify_project       | Lead            | 100%                  |
+| Lead             | Send advisor requests.               | send_advisor_request | Lead            | 100%                  |
+| Lead             | Submit the final report.             | submit_final_report  | Lead            | 100%                  |
+| Faculty          | See requests to be supervisors.      | see_request          | NormalFaculty   | 70%                   |
+| Faculty          | Send responses to serve as advisors. | send_response        | NormalFaculty   | 70%                   |
+| Faculty          | See details of all projects.         | see_project_details  | NormalFaculty   | 70%                   |
+| Faculty          | Evaluate projects.                   | evaluate_project     | NormalFaculty   | 70%                   |
+| Advising Faculty | See requests to be supervisors.      | see_request          | AdvisingFaculty | 60%                   |
+| Advising Faculty | Send accept or deny responses.       | send_response        | AdvisingFaculty | 60%                   |
+| Advising Faculty | See details of all projects.         | see_project_details  | AdvisingFaculty | 60%                   |
+| Advising Faculty | Evaluate projects.                   | evaluate_project     | AdvisingFaculty | 60%                   |
+| Advising Faculty | Approve projects.                    | approve_project      | AdvisingFaculty | 60%                   |
 ---
