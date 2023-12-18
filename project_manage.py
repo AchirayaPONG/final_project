@@ -1,10 +1,12 @@
-# import database module
-import csv, os
-from database import Table
-from database import Database
+"""This is the main file for the project management system."""
+import csv
+import datetime
+import os
 import random
 import time
-import datetime
+
+from database import Database, Table
+
 # define a function called initializing
 
 __location__ = os.path.realpath(
@@ -15,29 +17,32 @@ db = Database()
 
 # Member: Check member's project details in file project_table.csv
 
-def exit(file_name):
-    global db
-    with open(os.path.join(__location__, file_name+'.csv'), 'w') as f:
-        rows = csv.writer(f)
-        class_table: Table = db.search(file_name)
-        rows.writerow(class_table.get_table()[0].keys())
-        for r in class_table.get_table():
-            r: dict
-            value_r = r.values()
-            # {a: b, c: d}
-            # [a, b, c, d, ...]
-            rows.writerow(value_r)
+
+def exit_table():
+    """Exit function for exit related activities"""
+    for table in db.database:
+        with open(os.path.join(__location__, table.table_name+'.csv'),
+                  'w', encoding='utf-8') as f:
+            rows = csv.writer(f)
+            rows.writerow(table.get_table()[0].keys())
+            for r in table.get_table():
+                r: dict
+                value_r = r.values()
+                # {a: b, c: d}
+                # [a, b, c, d, ...]
+                rows.writerow(value_r)
 
 
 class Member:
-
+    """Member class for member related activities"""
     @staticmethod
     def check_project_id(user_id):
         """Check id in login.csv file and project_table.csv file
 
         if it is same then print project details.
         """
-        with open(os.path.join(__location__, 'project_table.csv')) as f:
+        with open(os.path.join(__location__, 'project_table.csv'), 'r',
+                  encoding='utf-8') as f:
             rows = csv.DictReader(f)
             list_project = []
             for r in rows:
@@ -46,7 +51,8 @@ class Member:
             return list_project
 
     @staticmethod
-    def modify_project_id(user_id):
+    def modify_project_id():
+        """Modify project id"""
         ask_user = input("Do you want to modify project details? (y/n): ")
         if ask_user == 'y':
             project_id = input("Enter project id: ")
@@ -54,6 +60,7 @@ class Member:
                 rows = csv.DictReader(f)
                 for r in rows:
                     if r['ProjectID'] == project_id:
+                        print('_' * 50)
                         print("Project details: ")
                         print('_' * 50)
                         print(f'Project project id: {r["ProjectID"]}')
@@ -66,6 +73,7 @@ class Member:
                         print('_' * 50)
                         ask_user = input("Do you want to modify "
                                          "project details? (y/n): ")
+                        print('_' * 50)
                         if ask_user == 'y':
                             print("** Enter new details **")
                             print('_' * 50)
@@ -90,12 +98,14 @@ class Member:
 
 
 class Admin:
+    """Admin class for admin related activities"""
     def __init__(self, update, delete, add):
         self.update = update
         self.delete = delete
         self.add = add
 
     def update(self, primary_attribute, primary_attribute_value):
+        """update the value of the primary attribute"""
         lst_update = []
         with open(os.path.join(__location__, 'login.csv')) as f:
             rows = csv.writer(f)
@@ -111,14 +121,18 @@ class Admin:
 
 
 class Student:
+    """Student class for student related activities"""
     def __init__(self, student_id):
+
         self.id = student_id
         self.invitation_status = None
         # None for no invitation, 'accepted',
         # or 'denied' for the respective status
         self.project_details = {}
 
+
     def see_invitation(self):
+        """See invitation"""
         val_project = db.search('project_table').table
         # val_project shows all the project details in project_table.csv file
         # And it is in list of dictionary format [{}, {}, {}]
@@ -134,6 +148,7 @@ class Student:
 
 
     def accept_or_deny(self):
+        """Accept or deny invitation"""
         val_project = db.search('member_table').table
         for project in val_project:
             if self.id in project.values():  # check if student is in project
@@ -156,6 +171,7 @@ class Student:
 
 
     def see_project_details(self):
+        """See project details"""
         if self.invitation_status == 'accepted':
             for key, value in self.project_details.items():
                 print("_" * 50)
@@ -168,6 +184,7 @@ class Student:
 
 
     def modify_project_details(self):
+        """Modify project details"""
         val_project = db.search('project_table').table
         if self.invitation_status == 'accepted':
             for project in val_project:  # show dictionary of project details
@@ -220,7 +237,9 @@ class Student:
 
 
 class LeadStudent:
-    def __init__(self, lead_id, project_table, person_table, member_request_table):
+    """LeadStudent class for lead student related activities"""
+    def __init__(self, lead_id, project_table, person_table,
+                 member_request_table):
         self.id = lead_id
         self.project_details = {}
         self.group_members = []
@@ -229,6 +248,7 @@ class LeadStudent:
         self.member_request_table: Table = member_request_table
 
     def show_information(self):
+        """Show information"""
         while True:
             print("1. Create Project")
             print("2. Find Members")
@@ -263,6 +283,7 @@ class LeadStudent:
 
 
     def create_project(self, title, advisor):
+        """Create project"""
         while True:
             random_number = random.randint(1, 999)
             formatted_number = f"{random_number:03d}"
@@ -279,14 +300,17 @@ class LeadStudent:
         }
 
     def find_members(self):
+        """Find members"""
         n = 1
         for project in self.project_table.table:
             if project['Lead'] == self.id:
-                print(f"{n}. {project['Title']}, Members: {project['Member1']}, {project['Member2']}")
+                print(f"{n}. {project['Title']},"
+                      f" Members: {project['Member1']}, {project['Member2']}")
                 n += 1
         print("_" * 50)
 
     def send_invitations(self):
+        """Send invitations to members"""
         for person in self.person_table.table:
             for project in self.project_table.table:
                 if project['Lead'] == self.id:
@@ -303,7 +327,8 @@ class LeadStudent:
         print("_" * 50)
 
     def add_member(self):
-        for project in self.project_table:
+        """Add member to project"""
+        for project in self.project_table.table:
             if self.id == project['Lead']:
                 if project['Member1'] == '':
                     project['Member1'] = input("Enter member1 ID: ")
@@ -311,13 +336,17 @@ class LeadStudent:
                     project['Member2'] = input("Enter member2 ID: ")
                 else:
                     print("This project is already full.")
+                    print("_" * 50)
+                    break
 
     def see_project_details(self):
+        """See project details"""
         print("\nProject Details:")
         for key, value in self.project_details.items():
             print(f"{key}: {value}\n")
 
     def modify_project_details(self):
+        """Modify project details"""
         print("_" * 50)
         ask_user = \
             input("Would you like to modify project details? (y/n): ").lower()
@@ -364,11 +393,12 @@ class LeadStudent:
                 self.project_details['Status'] = project_status
                 print("Project status updated successfully.")
             elif response == '8':
-                exit('project_table')
+                exit_table()
         else:
             print("Project details not modified.")
 
     def send_advisor_request(self, advisor):
+        """Send advisor request"""
         print(f"Sending request to advisor {advisor}"
               f" for project "
               f"'{self.project_table.filter(lambda x: x['Lead'] == self.id).table[0]['Title']}'")
@@ -378,7 +408,9 @@ class LeadStudent:
         print("_" * 50)
 
     def submit_final_report(self):
-        project = self.project_table.filter(lambda x: x['Lead'] == self.id).table[0]['Status'] == 'Completed'
+        """Submit final report"""
+        project = self.project_table.filter(lambda x: x['Lead'] == self.id)\
+            .table[0]['Status'] == 'Completed'
         if project:
             submit = \
                 input("Would you like to submit the final report? (y/n): ")
@@ -399,11 +431,13 @@ class LeadStudent:
 
 
 class NormalFaculty:
+    """NormalFaculty class for normal faculty related activities"""
     def __init__(self, faculty_id):
         self.id = faculty_id
 
     def see_supervisor_requests(self, project_requests):
-        if len(project_requests) == 0:
+        """See supervisor requests"""
+        if project_requests is None:
             print("_" * 50)
             print("Sorry, there are no requests for you at this time.")
             print("_" * 50)
@@ -417,30 +451,40 @@ class NormalFaculty:
                       f" Student: {request['StudentName']}")
 
 
-    def respond_to_request(self, project_id, response):
+    def respond_to_request(self, project_id):
+        """Respond to request"""
+        response = input("Would you like to respond to the request? (y/n): ")
+
         if response == 'y':
             print("_" * 50)
             print(f"Responding to the "
                   f"request for project {project_id}: {response}")
             print("_" * 50)
             # Logic to respond to the request goes here
-        else:
+        elif response == 'n':
             print("_" * 50)
             print('Request denied.')
             print("_" * 50)
+        else:
+            print("_" * 50)
+            print('Invalid response.')
+            print("_" * 50)
+
 
     def view_all_projects(self, all_projects):
+        """View all projects"""
         print("\nDetails of All Projects:")
         print("_" * 50)
-        for project in all_projects:
+        for project in all_projects.table:
             print(f"ProjectID: {project['ProjectID']},"
                   f" Title: {project['Title']},"
                   f" Advisor: {project['Advisor']}")
         print("_" * 50)
 
     def evaluate_projects(self, projects_to_evaluate):
+        """Evaluate projects"""
         print("\nEvaluating Projects:")
-        for project in projects_to_evaluate:
+        for project in projects_to_evaluate.table:
             # Placeholder logic for project evaluation,
             # you can expand on this based on your specific evaluation criteria
             evaluation_score = input(f"Enter evaluation score "
@@ -450,41 +494,85 @@ class NormalFaculty:
 
 
 class AdvisingFaculty:
+    """AdvisingFaculty class for advising faculty related activities"""
     def __init__(self, faculty_id):
         self.id = faculty_id
+        self.normal_faculty = NormalFaculty(faculty_id)
 
     def see_supervisor_requests(self, project_requests):
-        print(f"\nSupervisor Requests for :")
-        for request in project_requests:
-            print(f"ProjectID: {request['ProjectID']},"
-                  f" Title: {request['Title']},"
-                  f" Student: {request['StudentName']}")
+        """See supervisor requests"""
+        if self.normal_faculty.see_supervisor_requests(project_requests)\
+                is not None:
+            print("_" * 50)
+            print("Would you like to respond to any of the requests?")
+            print("_" * 50)
+            response = input("Enter project ID to respond to the request: ")
+            if response == 'y':
+                print("_" * 50)
+                print(f"Responding to the "
+                      f"request for project {response}: {response}")
+                print("_" * 50)
+            else:
+                print("_" * 50)
+                print('Request denied.')
+                print("_" * 50)
+        else:
+            print("_" * 50)
+            print("Sorry, there are no requests for you at this time.")
+            print("_" * 50)
+
+
 
     def send_accept_response(self, project_id):
+        """Send acceptance response"""
+        for project in project_id:
+            if project['ProjectID'] == project_id:
+                project['Status'] = 'Accepted'
+                print(f"Sending acceptance response for project {project_id}")
         print(f"Sending acceptance response for project {project_id}")
 
+
+
     def send_deny_response(self, project_id):
+        """Send denial response"""
+        for project in project_id:
+            if project['ProjectID'] == project_id:
+                project['Status'] = 'Denied'
+                print(f"Sending denial response for project {project_id}")
         print(f"Sending denial response for project {project_id}")
 
+
     def view_all_projects(self, all_projects):
+        """View all projects"""
         print("\nDetails of All Projects:")
         for project in all_projects:
-            print(f"ProjectID: {project['ProjectID']}, Title: {project['Title']}, Advisor: {project['Advisor']}")
+            print(f"ProjectID: {project['ProjectID']}, "
+                  f"Title: {project['Title']}, Advisor: {project['Advisor']}")
 
     def evaluate_projects(self, projects_to_evaluate):
+        """Evaluate projects"""
         print("\nEvaluating Projects:")
         for project in projects_to_evaluate:
-            evaluation_score = random.randint(1, 10)  # Placeholder for random evaluation score (customize as needed)
-            print(f"Project {project['ProjectID']} evaluated with a score of {evaluation_score}")
+            evaluation_score = random.randint(1, 10)
+            # Placeholder for random evaluation score (customize as needed)
+            print(f"Project {project['ProjectID']} "
+                  f"evaluated with a score of {evaluation_score}")
 
     def approve_project(self, project_id):
-        print(f"Approving project {project_id}")
+        """Approve project"""
+        if project_id['Status'] == 'Accepted':
+            print(f"Project {project_id} approved!")
+        else:
+            print(f"Project {project_id} denied!")
+
 
 
 
 def read_csv_data(filename):
+    """Read csv file and return list of dictionary"""
     lst_db = []
-    with open(os.path.join(__location__, filename)) as f:
+    with open(os.path.join(__location__, filename),
+              mode='r', encoding='utf-8') as f:
         rows = csv.DictReader(f)
         for r in rows:
             lst_db.append(dict(r))
@@ -493,22 +581,27 @@ def read_csv_data(filename):
 
 
 def initializing():
-    global db
+    """Initializing function for initializing database"""
     # Read all csv files
     read_person = read_csv_data('persons.csv')
     read_login = read_csv_data('login.csv')
     read_project_table = read_csv_data('project_table.csv')
     read_member_table = read_csv_data('member_table.csv')
+    read_advisor_table = read_csv_data('advisor_table.csv')
+
     # print(read_person)
     person = Table('persons', read_person)
     login_data = Table('login', read_login)
     project_table = Table('project_table', read_project_table)
     member_table = Table('member_table', read_member_table)
+    advisor_table = Table('advisor_table.csv', read_advisor_table)
 
+    # Add all tables to the database
     db.insert(person)
     db.insert(login_data)
     db.insert(project_table)
     db.insert(member_table)
+    db.insert(advisor_table)
 
 
 # here are things to do in this function:
@@ -522,11 +615,11 @@ def initializing():
 
     # add all these tables to the database
 
-# define a funcion called login
+# define a function called login
 
 
 def login():
-    global db
+    """Login function for login related activities"""
     user_name = input("ENTER USERNAME: ")
     pass_word = input("ENTER PASSWORD: ")
 
@@ -587,22 +680,26 @@ elif val[1] == 'member':
     member = Member()
     check_project = member.check_project_id(val[0])
     print(check_project)
-    modify_project = member.modify_project_id(val[0])
-    print(modify_project)
-    exit('project_table')
+    MODIFY_PROJECT = member.modify_project_id()
+    print(MODIFY_PROJECT)
+    exit_table()
     # see and do member related activities
 elif val[1] == 'lead':
     lead = LeadStudent(val[0],
                        db.search('project_table'),
                        db.search('persons'),
                        db.search('member_table'))
+
     lead.show_information()
     # see and do lead related activities
-# elif val[1] = 'faculty':
+elif val[1] == 'faculty':
+    faculty = NormalFaculty(val[0])
+    faculty.see_supervisor_requests(db.search('member_request_table'))
+    faculty.respond_to_request('project_id')
+    faculty.view_all_projects(db.search('project_table'))
+    faculty.evaluate_projects(db.search('project_table'))
     # see and do faculty related activities
 # elif val[1] = 'advisor':
     # see and do advisor related activities
 
 # once everything is done, make a call to the exit function
-
-

@@ -1,37 +1,88 @@
-database.py
-Have two classes
--Database class 
--Table class 
+### Project Planning
 
-About Database class have...
-- Attribute:
-database
-- Method:
-insert (add the table into the database)
-search (searching for a table: If table.table_name equal to table_name, return table. If it's not return None)
+#### Project Overview:
+The final project aims to develop a Python program in an object-oriented style to facilitate the administrative process of senior projects involving students, faculty, and admin. The key elements include managing persons, documents (specifically senior project reports), and their relationships.
 
-About Table class have...
-- Attribute:
-table_name
-table
-- Method:
-insert (append in entry)
-filter (filter the table)
-update (update the information)
-__str__(magic method: to write the string)
-get_table (getter)
+#### Person Types:
+1. **Student:**
+   - *Roles:*
+     - Lead (Heads the project)
+     - Member (Part of the project under the lead)
+     - Regular Student (Not yet a member of any project)
+   - *Interactions:*
+     - Sees invitational messages.
+     - Accepts or denies invitations.
+     - Views and modifies personal project details.
 
-project_manage.py
-Have 4 functions
+2. **Faculty:**
+   - *Roles:*
+     - Advisor (Supervises a project)
+     - Regular Faculty (Does not supervise any project)
+   - *Interactions:*
+     - Sees requests to be a supervisor.
+     - Responds to requests, either accepting or denying.
+     - Views details of all projects.
+     - Evaluates projects (more details in proposal).
+     - Approves projects.
 
-- read_csv_data(filename)
-    To read database.py file
--  initializing()
-     Create two tables to initialize the database. Using person.csv and
- login.csv file 
+3. **Admin:**
+   - *Roles:*
+     - Manages the database.
+     - Can update all tables.
 
-- login() 
-    To check username and password and if it's equal to the data return ID and role.
+#### Document Type:
+- Senior Project Report
 
-- exit ()
-    To update the person.csv the new information.
+#### Overall Process:
+1. Lead student proposes an interesting project.
+2. Lead student forms a group by inviting at most two members.
+3. The group searches for an advisor to supervise the project.
+4. The advisor agrees to supervise the project.
+5. The group submits a project proposal to the advisor.
+6. The advisor approves the proposal.
+7. Upon project completion, the group submits the project report to the advisor.
+8. The advisor approves the final project.
+
+#### Interactions:
+
+##### Admin:
+- Manages the database.
+- Can update all tables.
+
+##### Student:
+- Sees invitational messages.
+- Accepts or denies invitations.
+- Views and modifies personal project details.
+
+##### Lead Student:
+- Creates a project.
+- Finds members.
+- Sends invitational messages.
+- Adds members to the project.
+- Views and modifies personal project details.
+- Sends requests to potential advisors.
+- Submits the final project report.
+
+##### Member Student:
+- Views and modifies personal project details.
+
+##### Normal Faculty (Not an Advisor):
+- Sees requests to be a supervisor.
+- Sends responses denying to serve as an advisor.
+- Views details of all projects.
+- Evaluates projects (more details in proposal).
+
+##### Advising Faculty:
+- Sees requests to be a supervisor.
+- Sends accept responses (for projects serving as an advisor).
+- Sends deny responses (for projects not serving as an advisor).
+- Views details of all projects.
+- Evaluates projects (more details in proposal).
+- Approves projects.
+
+### Next Steps:
+- Develop a detailed proposal outlining project structure, classes, methods, and interactions.
+- Begin implementing the program following the proposed structure.
+- Regularly test and debug the program to ensure smooth functionality.
+- Continuously refer to the proposal to guide development.
+- Implement any additional features or refinements as needed.
