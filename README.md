@@ -44,7 +44,7 @@ class Member
 complete: 100%
 
 class LeadStudent
--show_project_details : show project detail
+-show_information : show project detail
 -create_project : create project
 -find_member : find member to join project
 -add_member : add member to project
@@ -159,7 +159,7 @@ python project_manage.py
 | Member           | Modify project details.              | modify_project         | Member          | 100%                  |
 | Lead             | Create projects.                     | create_project         | Lead            | 100%                  |
 | Lead             | Find and add members to projects.    | find_member            | Lead            | 100%                  |
-| Lead             | Show project details.                | show_project_details   | Lead            | 100%                  |
+| Lead             | Show project details.                | show_information       | Lead            | 100%                  |
 | Lead             | Add member to project.               | add_member             | Lead            | 100%                  |
 | Lead             | See project details.                 | see_project_details    | Lead            | 100%                  |
 | Lead             | Modify project details.              | modify_project         | Lead            | 100%                  |
