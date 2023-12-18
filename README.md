@@ -23,55 +23,51 @@ Have 3 methods
 
 class Table
 Have 5 methods
+- `__init__` : create csv file
 - `insert` : insert data to csv file
 - `filter `: filter data from csv file
 - `update` : update data from csv file
+- `__str__ `: display data from csv file in string format
+- `get_table `: get data from csv file
 
 #### project_manage.py ####
 class Admin
-- update_user : update user data
-complete: 90%
+- update_user : update the value of the primary attribute
 
 class Student
 - see_invitation : see invitation from project
 - accept_or_deny : accept or deny invitation from project
 - see_project_details : see project detail
 - modify_project_details : modify project detail
-complete: 100%
 
 class Member
-- check_project_details : check project detail
-- modify_project_details : modify project detail
-complete: 100%
+- check_project_id : check project detail
+- modify_project_id : modify project detail
 
 class LeadStudent
 - show_information : show project detail
 - create_project : create project
-- find_member : find member to join project
+- find_members : find members to join project
 - send_invitations : send invitation to member
 - add_member : add member to project
 - see_project_details : see project detail
 - modify_project_details : modify project detail
 - send_advisor_request : send advisor request
 - submit_final_report : submit final report
-complete: 100%
 
 class NormalFaculty
 - see_supervisor_requests : see supervisor requests
 - respond_to_requests : respond to supervisor requests
 - view_all_projects : view all projects
-- evaluate_project : evaluate project
-complete: 70%
+- evaluate_projects : evaluate projects
 
 class AdvisingFaculty
-- `__init__ `: create csv file
 - see_supervisor_requests : see supervisor requests
 - send_accept_response : send accept response
 - send_deny_response : send deny response
 - view_all_projects : view all projects
-- evaluate_project : evaluate project
+- evaluate_projects : evaluate projects
 - approve_project : approve project
-complete: 60%
 
 ----------------------------------------------
 
@@ -159,10 +155,10 @@ python project_manage.py
 | Student          | See invitation from project.               | see_invitation          | Student         | 100%                  |
 | Student          | See project details.                       | see_project_details     | Student         | 100%                  |
 | Student          | Modify project details.                    | modify_project_details  | Student         | 100%                  |
-| Member           | Check project details.                     | check_project           | Member          | 100%                  |
-| Member           | Modify project details.                    | modify_project          | Member          | 100%                  |
+| Member           | Check project details.                     | check_project_id        | Member          | 100%                  |
+| Member           | Modify project details.                    | modify_project_id       | Member          | 100%                  |
 | Lead             | Create projects.                           | create_project          | Lead            | 100%                  |
-| Lead             | Find members in the project.               | find_member             | Lead            | 100%                  |
+| Lead             | Find members in the project.               | find_members            | Lead            | 100%                  |
 | Lead             | Show project details.                      | show_information        | Lead            | 100%                  |
 | Lead             | Add member to project.                     | add_member              | Lead            | 100%                  |
 | Lead             | Send invitation to member.                 | send_invitation         | Lead            | 100%                  |
@@ -173,17 +169,10 @@ python project_manage.py
 | Faculty          | See supervisor requests.                   | see_supervisor_requests | NormalFaculty   | 70%                   |
 | Faculty          | Respond to supervisor requests.            | respond_to_requests     | NormalFaculty   | 70%                   |
 | Faculty          | View all projects.                         | view_all_projects       | NormalFaculty   | 70%                   |
-| Faculty          | Evaluate projects.                         | evaluate_project        | NormalFaculty   | 70%                   |
+| Faculty          | Evaluate projects.                         | evaluate_projects       | NormalFaculty   | 70%                   |
 | Advising Faculty | create csv file.                           | see_supervisor_requests | AdvisingFaculty | 60%                   |
 | Advising Faculty | Send accept response.                      | send_accept_response    | AdvisingFaculty | 60%                   |
 | Advising Faculty | Send deny response.                        | send_deny_response      | AdvisingFaculty | 60%                   |
-| Advising Faculty | Evaluate projects.                         | evaluate_project        | AdvisingFaculty | 60%                   |
-| Advising Faculty | Approve projects.                          | approve_project         | AdvisingFaculty | 60%                   |
+| Advising Faculty | Evaluate projects.                         | evaluate_projects       | AdvisingFaculty | 60%                   |
+| Advising Faculty | Approve project.                           | approve_project         | AdvisingFaculty | 60%                   |
 ---
-- `__init__ `: create csv file
-- see_supervisor_requests : see supervisor requests
-- send_accept_response : send accept response
-- send_deny_response : send deny response and 
-- view_all_projects : view all projects
-- evaluate_project : evaluate project
-- approve_project : approve project
