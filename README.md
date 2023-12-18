@@ -37,21 +37,21 @@ class Admin
 class Student
 - see_invitation : see invitation from project
 - accept_or_deny : accept or deny invitation from project
-- see_project_details : see project detail
-- modify_project_details : modify project detail
+- see_project_details : see project details
+- modify_project_details : modify project details
 
 class Member
-- check_project_id : check project detail
-- modify_project_id : modify project detail
+- check_project_id : check project details
+- modify_project_id : modify project details
 
 class LeadStudent
-- show_information : show project detail
+- show_information : show project details
 - create_project : create project
 - find_members : find members to join project
 - send_invitations : send invitation to member
 - add_member : add member to project
-- see_project_details : see project detail
-- modify_project_details : modify project detail
+- see_project_details : see project details
+- modify_project_details : modify project details
 - send_advisor_request : send advisor request
 - submit_final_report : submit final report
 
@@ -132,6 +132,20 @@ Files and Structure
 `project_manage.py`: Main module for the project.
 ___
 
+### Classes Database ###
+
+| Action                    | Method    | Class    | Completion percentage |
+|---------------------------|-----------|----------|-----------------------|
+| Insert data to csv file   | insert    | Database | 100%                  |
+| Search data from csv      | search    | Database | 100%                  |
+| Create csv file           | __init__  | Database | 100%                  |
+| Create csv file           | __init__  | Table    | 100%                  |
+| Insert data to csv file   | insert    | Table    | 100%                  |
+| Filter data from csv file | filter    | Table    | 100%                  |
+| Update data from csv file | update    | Table    | 100%                  |
+| Display data from csv     | __str__   | Table    | 100%                  |
+| Get data from csv         | get_table | Table    | 100%                  |
+---
 
 # Run the program 
 ## Run the program by typing the following command in the terminal: 
@@ -145,7 +159,7 @@ python project_manage.py
 ```
 ---
 
-### Classes ###
+### Classes Project manage ###
 
 | Roles            | Action                                     | Method                  | Class           | Completion percentage |
 |------------------|--------------------------------------------|-------------------------|-----------------|-----------------------|
@@ -161,18 +175,19 @@ python project_manage.py
 | Lead             | Find members in the project.               | find_members            | Lead            | 100%                  |
 | Lead             | Show project details.                      | show_information        | Lead            | 100%                  |
 | Lead             | Add member to project.                     | add_member              | Lead            | 100%                  |
-| Lead             | Send invitation to member.                 | send_invitation         | Lead            | 100%                  |
+| Lead             | Send invitation to member.                 | send_invitations        | Lead            | 100%                  |
 | Lead             | See project details.                       | see_project_details     | Lead            | 100%                  |
-| Lead             | Modify project details.                    | modify_project          | Lead            | 100%                  |
+| Lead             | Modify project details.                    | modify_project_details  | Lead            | 100%                  |
 | Lead             | Send advisor requests.                     | send_advisor_request    | Lead            | 100%                  |
 | Lead             | Submit the final report.                   | submit_final_report     | Lead            | 100%                  |
 | Faculty          | See supervisor requests.                   | see_supervisor_requests | NormalFaculty   | 70%                   |
-| Faculty          | Respond to supervisor requests.            | respond_to_requests     | NormalFaculty   | 70%                   |
+| Faculty          | Respond to supervisor request.             | respond_to_request      | NormalFaculty   | 70%                   |
 | Faculty          | View all projects.                         | view_all_projects       | NormalFaculty   | 70%                   |
 | Faculty          | Evaluate projects.                         | evaluate_projects       | NormalFaculty   | 70%                   |
 | Advising Faculty | create csv file.                           | see_supervisor_requests | AdvisingFaculty | 60%                   |
 | Advising Faculty | Send accept response.                      | send_accept_response    | AdvisingFaculty | 60%                   |
 | Advising Faculty | Send deny response.                        | send_deny_response      | AdvisingFaculty | 60%                   |
+| Advising Faculty | View all projects.                         | view_all_projects       | AdvisingFaculty | 60%                   |
 | Advising Faculty | Evaluate projects.                         | evaluate_projects       | AdvisingFaculty | 60%                   |
 | Advising Faculty | Approve project.                           | approve_project         | AdvisingFaculty | 60%                   |
 ---
