@@ -55,6 +55,7 @@ class Member:
                 for r in rows:
                     if r['ProjectID'] == project_id:
                         print("Project details: ")
+                        print('_' * 50)
                         print(f'Project project id: {r["ProjectID"]}')
                         print(f'Project title: {r["Title"]}')
                         print(f'Project lead: {r["Lead"]}')
@@ -62,10 +63,12 @@ class Member:
                         print(f'Project member2: {r["Member2"]}')
                         print(f'Project advisor: {r["Advisor"]}')
                         print(f'Project status: {r["Status"]}')
+                        print('_' * 50)
                         ask_user = input("Do you want to modify "
                                          "project details? (y/n): ")
                         if ask_user == 'y':
-                            print("Enter new details: ")
+                            print("** Enter new details **")
+                            print('_' * 50)
                             project_title = input("Enter project title: ")
                             project_lead = input("Enter project lead: ")
                             project_member1 = input("Enter project member1: ")
@@ -78,7 +81,9 @@ class Member:
                             r['Member2'] = project_member2
                             r['Advisor'] = project_advisor
                             r['Status'] = project_status
+                            print('_' * 50)
                             print("Project details updated successfully.")
+                            print('_' * 50)
                             return True
                         else:
                             return False
@@ -211,7 +216,7 @@ class Student:
                         project['Status'] = project_status
                         print("Project status updated successfully.")
                     elif response == '8':
-                        exit('project_table')
+                        break
 
 
 class LeadStudent:
@@ -254,7 +259,7 @@ class LeadStudent:
             elif choice == '7':
                 self.submit_final_report()
             elif choice == '8':
-                exit('project_table')
+                break
 
 
     def create_project(self, title, advisor):
@@ -398,23 +403,40 @@ class NormalFaculty:
         self.id = faculty_id
 
     def see_supervisor_requests(self, project_requests):
-        # if
-        # print(f"\nSupervisor Requests for {self.first_name} {self.last_name}:")
-        for request in project_requests:
-            print(f"ProjectID: {request['ProjectID']},"
-                  f" Title: {request['Title']},"
-                  f" Student: {request['StudentName']}")
+        if len(project_requests) == 0:
+            print("_" * 50)
+            print("Sorry, there are no requests for you at this time.")
+            print("_" * 50)
+        else:
+            print("_" * 50)
+            print(f"\nSupervisor Requests for {self.id}:")
+            print("_" * 50)
+            for request in project_requests:
+                print(f"ProjectID: {request['ProjectID']},"
+                      f" Title: {request['Title']},"
+                      f" Student: {request['StudentName']}")
+
 
     def respond_to_request(self, project_id, response):
-        print(f"Responding to the "
-              f"request for project {project_id}: {response}")
+        if response == 'y':
+            print("_" * 50)
+            print(f"Responding to the "
+                  f"request for project {project_id}: {response}")
+            print("_" * 50)
+            # Logic to respond to the request goes here
+        else:
+            print("_" * 50)
+            print('Request denied.')
+            print("_" * 50)
 
     def view_all_projects(self, all_projects):
         print("\nDetails of All Projects:")
+        print("_" * 50)
         for project in all_projects:
             print(f"ProjectID: {project['ProjectID']},"
                   f" Title: {project['Title']},"
                   f" Advisor: {project['Advisor']}")
+        print("_" * 50)
 
     def evaluate_projects(self, projects_to_evaluate):
         print("\nEvaluating Projects:")
@@ -519,6 +541,8 @@ def login():
         if check_username(check_data) and check_password(check_data):
             return [check_data['ID'], check_data['role']]
     return None
+
+
 
 # here are things to do in this function:
 # add code that performs a login task
